@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 public class FacultyController {
 
     private final FacultyService facultyService;
+    private Faculty faculty;
 
     @Autowired
     public FacultyController(FacultyService facultyService) {
@@ -29,6 +30,7 @@ public class FacultyController {
 
     @PostMapping
     public Faculty createFaculty(@RequestBody Faculty faculty) {
+        this.faculty = faculty;
         return facultyService.createFaculty(faculty);
     }
 
