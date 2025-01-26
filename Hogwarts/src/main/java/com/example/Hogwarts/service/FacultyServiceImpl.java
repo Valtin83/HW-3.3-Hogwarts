@@ -33,7 +33,8 @@ public class FacultyServiceImpl implements FacultyService{
     }
 
     @Override
-    public void removeFaculty(Long id) {
+    public boolean removeFaculty(Long id) {
         facultyRepository.deleteById(id);
+        return false;
     }
 }

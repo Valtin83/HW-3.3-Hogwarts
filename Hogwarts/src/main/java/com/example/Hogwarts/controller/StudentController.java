@@ -2,12 +2,10 @@ package com.example.Hogwarts.controller;
 
 import com.example.Hogwarts.model.Student;
 import com.example.Hogwarts.service.StudentService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Collection;
-import java.util.Collections;
 
 @RestController
 @RequestMapping("/student")
@@ -15,6 +13,7 @@ public class StudentController {
 
     private final StudentService studentService;
 
+    @Autowired
     public StudentController(StudentService studentService) {
         this.studentService = studentService;
     }
@@ -27,14 +26,6 @@ public class StudentController {
         }
         return ResponseEntity.ok(student);
     }
-
-//    @GetMapping
-//    public ResponseEntity<Collection<Student>> findStudents(@RequestParam(required = false) int age) {
-//        if (age > 0) {
-//            return ResponseEntity.ok(studentService.findByAge(age));
-//        }
-//        return ResponseEntity.ok(Collections.emptyList());
-//    }
 
     @PostMapping
     public Student createStudent(@RequestBody Student student) {

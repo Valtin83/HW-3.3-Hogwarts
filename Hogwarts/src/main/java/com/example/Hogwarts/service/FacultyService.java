@@ -10,6 +10,6 @@ public interface FacultyService {
 
     Faculty updateFaculty(Faculty faculty);
 
-    void removeFaculty(Long id);
+    boolean removeFaculty(Long id);
 
 }
