@@ -1,6 +1,7 @@
 package com.example.Hogwarts.service;
 
 import com.example.Hogwarts.exception.StudentNotFoundException;
+import com.example.Hogwarts.model.Faculty;
 import com.example.Hogwarts.model.Student;
 import com.example.Hogwarts.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,5 +38,11 @@ public class StudentServiceImpl implements StudentService{
     public void removeStudent(Long id) {
         studentRepository.deleteById(id);
 
+    }
+
+    @Override
+    public Faculty getStudentFaculty(Long studentId) {
+        Student student = getStudent(studentId); // получаем студента
+        return student.getFaculty(); // возвращаем факультет студента
     }
 }

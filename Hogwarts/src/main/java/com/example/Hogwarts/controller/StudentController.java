@@ -1,5 +1,6 @@
 package com.example.Hogwarts.controller;
 
+import com.example.Hogwarts.model.Faculty;
 import com.example.Hogwarts.model.Student;
 import com.example.Hogwarts.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,5 +47,11 @@ public class StudentController {
     public ResponseEntity<Void> deleteStudent(@PathVariable Long id) {
         studentService.removeStudent(id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{id}/faculty")
+    public ResponseEntity<Faculty> getStudentFaculty(@PathVariable Long id) {
+        Faculty faculty = studentService.getStudentFaculty(id);
+        return ResponseEntity.ok(faculty);
     }
 }

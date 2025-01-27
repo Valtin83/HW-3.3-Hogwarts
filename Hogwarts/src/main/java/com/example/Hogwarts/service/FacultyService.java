@@ -1,6 +1,9 @@
 package com.example.Hogwarts.service;
 
 import com.example.Hogwarts.model.Faculty;
+import com.example.Hogwarts.model.Student;
+
+import java.util.List;
 
 public interface FacultyService {
 
@@ -10,6 +13,9 @@ public interface FacultyService {
 
     Faculty updateFaculty(Faculty faculty);
 
-    boolean removeFaculty(Long id);
+    void removeFaculty(Long id);
 
-}
+    List<Student> getStudentsByFaculty(Long facultyId);
+
+    }
+

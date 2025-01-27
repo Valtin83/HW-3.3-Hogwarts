@@ -81,10 +81,7 @@ public class FacultyServiceImplTest {
     @Test
     public void testRemoveFaculty() {
         doNothing().when(facultyRepository).deleteById(1L);
-
-        boolean result = facultyServiceImpl.removeFaculty(1L);
-
-        assertFalse(result);
+        facultyServiceImpl.removeFaculty(1L);
         verify(facultyRepository, times(1)).deleteById(1L);
     }
 }

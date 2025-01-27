@@ -2,18 +2,24 @@ package com.example.Hogwarts.service;
 
 import com.example.Hogwarts.exception.FacultyNotFoundException;
 import com.example.Hogwarts.model.Faculty;
+import com.example.Hogwarts.model.Student;
 import com.example.Hogwarts.repository.FacultyRepository;
+import com.example.Hogwarts.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class FacultyServiceImpl implements FacultyService{
 
     private final FacultyRepository facultyRepository;
+    private final StudentRepository studentRepository;
 
     @Autowired
-    public FacultyServiceImpl(FacultyRepository facultyRepository) {
+    public FacultyServiceImpl(FacultyRepository facultyRepository, StudentRepository studentRepository) {
         this.facultyRepository = facultyRepository;
+        this.studentRepository = studentRepository;
     }
 
     @Override
@@ -33,8 +39,13 @@ public class FacultyServiceImpl implements FacultyService{
     }
 
     @Override
-    public boolean removeFaculty(Long id) {
+    public void removeFaculty(Long id) {
         facultyRepository.deleteById(id);
-        return false;
+
+    }
+
+    @Override
+    public List<Student> getStudentsByFaculty(Long facultyId) {
+        return studentRepository.findByFacultyId(facultyId);
     }
 }

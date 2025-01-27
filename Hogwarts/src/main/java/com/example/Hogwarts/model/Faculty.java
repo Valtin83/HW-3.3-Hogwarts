@@ -1,10 +1,9 @@
 package com.example.Hogwarts.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 public class Faculty {
@@ -15,6 +14,9 @@ public class Faculty {
 
     private String name;
     private String color;
+
+    @ManyToMany(mappedBy = "faculty", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Student> student;
 
     public Faculty(){
     }
@@ -69,5 +71,7 @@ public class Faculty {
                 ", color='" + color + '\'' +
                 '}';
     }
+
+
 }
 

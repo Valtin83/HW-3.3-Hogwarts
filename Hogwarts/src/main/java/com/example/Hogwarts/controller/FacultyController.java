@@ -1,21 +1,26 @@
 package com.example.Hogwarts.controller;
 
 import com.example.Hogwarts.model.Faculty;
+import com.example.Hogwarts.model.Student;
 import com.example.Hogwarts.service.FacultyService;
+import com.example.Hogwarts.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/faculty")
 public class FacultyController {
 
     private final FacultyService facultyService;
+
     private Faculty faculty;
 
     @Autowired
-    public FacultyController(FacultyService facultyService) {
+    public FacultyController(FacultyService facultyService, StudentService studentService) {
         this.facultyService = facultyService;
     }
 
@@ -45,9 +50,13 @@ public class FacultyController {
 
     @DeleteMapping("{id}")
     public ResponseEntity<Void> removeFaculty(@PathVariable Long id) {
-        if (facultyService.removeFaculty(id)) {
-            return ResponseEntity.ok().build();
-        }
-        return ResponseEntity.notFound().build();
+        facultyService.removeFaculty(id);
+        return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/faculty/{facultyId}")
+    public List<Student> getStudentsByFaculty(@PathVariable Long facultyId) {
+        return facultyService.getStudentsByFaculty(facultyId);
+    }
+
 }

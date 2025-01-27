@@ -1,5 +1,6 @@
 package com.example.Hogwarts.service;
 
+import com.example.Hogwarts.model.Faculty;
 import com.example.Hogwarts.model.Student;
 
 public interface StudentService {
@@ -11,4 +12,6 @@ public interface StudentService {
     Student updateStudent(Student student);
 
     void removeStudent(Long id);
+
+    Faculty getStudentFaculty(Long studentId);
 }
