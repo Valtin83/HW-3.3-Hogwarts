@@ -15,7 +15,7 @@ public class Faculty {
     private String name;
     private String color;
 
-    @ManyToMany(mappedBy = "faculty", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "faculty")
     private Set<Student> student;
 
     public Faculty(){

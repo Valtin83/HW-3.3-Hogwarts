@@ -16,6 +16,7 @@ public interface FacultyService {
     void removeFaculty(Long id);
 
     List<Student> getStudentsByFaculty(Long facultyId);
+}
 
-    }
+
 

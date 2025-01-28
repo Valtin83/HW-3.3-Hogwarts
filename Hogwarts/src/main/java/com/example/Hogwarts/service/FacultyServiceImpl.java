@@ -13,10 +13,11 @@ import java.util.List;
 @Service
 public class FacultyServiceImpl implements FacultyService{
 
+    @Autowired
     private final FacultyRepository facultyRepository;
     private final StudentRepository studentRepository;
 
-    @Autowired
+
     public FacultyServiceImpl(FacultyRepository facultyRepository, StudentRepository studentRepository) {
         this.facultyRepository = facultyRepository;
         this.studentRepository = studentRepository;
@@ -48,4 +49,6 @@ public class FacultyServiceImpl implements FacultyService{
     public List<Student> getStudentsByFaculty(Long facultyId) {
         return studentRepository.findByFacultyId(facultyId);
     }
+
+
 }
