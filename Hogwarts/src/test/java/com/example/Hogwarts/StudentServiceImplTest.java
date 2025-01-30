@@ -37,7 +37,7 @@ public class StudentServiceImplTest {
     public void testCreateStudent() {
         when(studentRepository.save(any(Student.class))).thenReturn(student);
 
-        Student createdStudent = studentServiceImpl.createStudent(student);
+        Student createdStudent = studentServiceImpl.addStudent(student);
 
         assertNotNull(createdStudent);
         assertEquals("Harry Potter", createdStudent.getName());

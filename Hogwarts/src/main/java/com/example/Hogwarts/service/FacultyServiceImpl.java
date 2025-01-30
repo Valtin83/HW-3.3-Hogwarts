@@ -24,7 +24,7 @@ public class FacultyServiceImpl implements FacultyService{
     }
 
     @Override
-    public Faculty createFaculty(Faculty faculty) {
+    public Faculty addFaculty(Faculty faculty) {
         return facultyRepository.save(faculty);
     }
 
@@ -49,6 +49,5 @@ public class FacultyServiceImpl implements FacultyService{
     public List<Student> getStudentsByFaculty(Long facultyId) {
         return studentRepository.findByFacultyId(facultyId);
     }
-
 
 }
