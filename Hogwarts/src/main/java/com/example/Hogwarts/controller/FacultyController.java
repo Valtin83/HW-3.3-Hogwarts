@@ -58,6 +58,9 @@ public class FacultyController {
         return facultyService.getStudentsByFaculty(facultyId);
     }
 
-
-
+    @GetMapping("/search")
+    public List<Faculty> search(@RequestParam(required = false) String color,
+                                @RequestParam(required = false) String name) {
+        return facultyService.searchByColorOrName(color, name);
+    }
 }

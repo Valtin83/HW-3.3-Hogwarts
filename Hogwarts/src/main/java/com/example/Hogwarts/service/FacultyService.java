@@ -17,6 +17,8 @@ public interface FacultyService {
     List<Student> getStudentsByFaculty(Long facultyId);
 
     Faculty addFaculty(Faculty faculty);
+
+    List<Faculty> searchByColorOrName(String color, String name);
 }
 
 
