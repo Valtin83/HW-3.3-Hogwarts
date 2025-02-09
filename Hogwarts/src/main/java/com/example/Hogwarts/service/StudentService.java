@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface StudentService {
 
-//    Student createStudent(Student student);
+    Student createStudent(Student student);
 
     Student getStudent(Long id);
 
@@ -19,5 +19,5 @@ public interface StudentService {
 
     List<Student> getStudentsByAgeRange(int min, int max);
 
-    Student addStudent(Student student);
+
 }

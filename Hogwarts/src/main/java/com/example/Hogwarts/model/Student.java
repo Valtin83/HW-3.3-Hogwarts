@@ -18,8 +18,9 @@ public class Student {
     @JoinColumn(name = "faculty_id")
     private Faculty faculty;
 
-    public Student(){
+    public Student() {
     }
+
     public Student(Long id, String name, int age) {
         this.id = id;
         this.name = name;
@@ -79,5 +80,8 @@ public class Student {
     public void setFaculty(Faculty faculty) {
         this.faculty = faculty;
     }
+
 }
+
+
 

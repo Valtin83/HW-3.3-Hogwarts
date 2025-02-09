@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface FacultyService {
 
+    Faculty createFaculty(Faculty faculty);
 
     Faculty getFaculty(Long id);
 
@@ -15,8 +16,6 @@ public interface FacultyService {
     void removeFaculty(Long id);
 
     List<Student> getStudentsByFaculty(Long facultyId);
-
-    Faculty addFaculty(Faculty faculty);
 
     List<Faculty> searchByColorOrName(String color, String name);
 }

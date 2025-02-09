@@ -24,7 +24,7 @@ public class FacultyServiceImpl implements FacultyService{
     }
 
     @Override
-    public Faculty addFaculty(Faculty faculty) {
+    public Faculty createFaculty(Faculty faculty) {
         return facultyRepository.save(faculty);
     }
 
