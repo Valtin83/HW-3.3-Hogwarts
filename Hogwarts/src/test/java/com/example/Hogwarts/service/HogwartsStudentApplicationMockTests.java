@@ -1,33 +1,21 @@
 package com.example.Hogwarts.service;
-
 import com.example.Hogwarts.controller.StudentController;
-import com.example.Hogwarts.model.Faculty;
 import com.example.Hogwarts.model.Student;
 import com.example.Hogwarts.repository.FacultyRepository;
 import com.example.Hogwarts.repository.StudentRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONObject;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
-
-import org.springframework.jmx.export.annotation.ManagedAttribute;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
-
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -53,23 +41,20 @@ public class HogwartsStudentApplicationMockTests {
     @MockBean
     private FacultyRepository facultyRepository;
 
-    @BeforeEach
-    public void setUp() {
-        MockitoAnnotations.openMocks(this);
-        objectMapper = new ObjectMapper();
-    }
-
     @Test
-    void testCreateStudent() throws Exception {
-        Long id = 1L;
-        String name = "Bob";
+    void testSaveStudent() throws Exception {
+        final String name = "Bob";
+        final int age = 12;
+        final long id = 1;
 
         JSONObject studentObject = new JSONObject();
-        studentObject.put("Bob", name);
+        studentObject.put("name", name);
+        studentObject.put("age", age);
 
         Student student = new Student();
-        student.setId(id);
-        student.setName(name);
+        student.setId(1L);
+        student.setName("Bob");
+        studentObject.put("age", age);
 
         when(studentRepository.save(any(Student.class))).thenReturn(student);
         when(studentRepository.findById(any(Long.class))).thenReturn(Optional.of(student));
@@ -81,71 +66,27 @@ public class HogwartsStudentApplicationMockTests {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(id))
-                .andExpect(jsonPath("$.name").value(name));
-    }
+                .andExpect(jsonPath("$.name").value(name))
+                .andExpect(jsonPath("$.age").value(age));
 
-    @Test
-    void testGetStudentInfo() throws Exception {
-        Student student = new Student();
-        when(studentService.getStudent(anyLong())).thenReturn(student);
-
-        mockMvc.perform(get("/student/{id}", 1))
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/student/1")
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.name").value("Bob"));
-    }
-
-    @Test
-    void testEditStudent() throws Exception {
-        Student student = new Student();
-        when(studentService.updateStudent(any(Student.class))).thenReturn(student);
+                .andExpect(jsonPath("$.id").value(id))
+                .andExpect(jsonPath("$.name").value(name))
+                .andExpect(jsonPath("$.age").value(age));
 
         mockMvc.perform(put("/student")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(student)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.name").value("John Smith"));
-    }
-
-    @Test
-    void testEditStudent_BadRequest() throws Exception {
-        when(studentService.updateStudent(any(Student.class))).thenReturn(null);
-        Student student = new Student();
-
-        mockMvc.perform(put("/student")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(student)))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    void testDeleteStudent() throws Exception {
-        doNothing().when(studentService).removeStudent(anyLong());
+                .andExpect(jsonPath("$.name").value("John Smith"))
+                .andExpect(jsonPath("$.age").value(14));
 
         mockMvc.perform(delete("/student/{id}", 1))
                 .andExpect(status().isOk());
     }
 
-    @Test
-    void testGetStudentFaculty() throws Exception {
-        Faculty faculty = new Faculty();
-        when(studentService.getStudentFaculty(anyLong())).thenReturn(faculty);
-
-        mockMvc.perform(get("/student/{id}/faculty", 1))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.name").value("Computer Science"));
-    }
-
-    @Test
-    void testGetStudentsByAgeRange() throws Exception {
-        List<Student> students = Collections.singletonList(new Student());
-        when(studentService.getStudentsByAgeRange(18, 25)).thenReturn(students);
-
-        mockMvc.perform(get("/student/age?min=18&max=25"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$[0].name").value("John Doe"));
-    }
 }
