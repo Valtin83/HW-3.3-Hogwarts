@@ -3,6 +3,7 @@ package com.example.Hogwarts.service;
 import com.example.Hogwarts.controller.StudentController;
 import com.example.Hogwarts.model.Faculty;
 import com.example.Hogwarts.model.Student;
+import com.example.Hogwarts.repository.FacultyRepository;
 import com.example.Hogwarts.repository.StudentRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONObject;
@@ -17,6 +18,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 
+import org.springframework.jmx.export.annotation.ManagedAttribute;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -47,6 +49,9 @@ public class HogwartsStudentApplicationMockTests {
 
     @MockBean
     private StudentRepository studentRepository;
+
+    @MockBean
+    private FacultyRepository facultyRepository;
 
     @BeforeEach
     public void setUp() {

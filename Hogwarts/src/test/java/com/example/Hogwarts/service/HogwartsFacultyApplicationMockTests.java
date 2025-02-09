@@ -1,9 +1,9 @@
 package com.example.Hogwarts.service;
 import com.example.Hogwarts.controller.FacultyController;
-import com.example.Hogwarts.controller.StudentController;
 import com.example.Hogwarts.model.Faculty;
 import com.example.Hogwarts.model.Student;
 import com.example.Hogwarts.repository.FacultyRepository;
+import com.example.Hogwarts.repository.StudentRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,13 +36,16 @@ public class HogwartsFacultyApplicationMockTests {
     private MockMvc mockMvc;
 
     @SpyBean
-    private FacultyServiceImpl facultyService;
+    private FacultyService facultyService;
 
     @InjectMocks
-    private StudentController studentController;
+    private FacultyController facultyController;
 
     @MockBean
     private FacultyRepository facultyRepository;
+
+    @MockBean
+    private StudentRepository studentRepository;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -56,10 +59,10 @@ public class HogwartsFacultyApplicationMockTests {
     @Test
     void testCreateFaculty() throws Exception {
         Long id = 1L;
-        String name = "Gryffindor";
+        String name = "Engineering";
 
         JSONObject facultyObject = new JSONObject();
-        facultyObject.put("Gryffindor", name);
+        facultyObject.put("Engineering", name);
 
         Faculty faculty = new Faculty();
         faculty.setId(id);
@@ -83,6 +86,7 @@ public class HogwartsFacultyApplicationMockTests {
     public void testGetFacultyInfo() throws Exception {
         Faculty faculty = new Faculty(); // создайте объект Faculty с необходимыми данными
         faculty.setId(1L); // установите id
+
         when(facultyService.getFaculty(anyLong())).thenReturn(faculty);
 
         mockMvc.perform(get("/faculty/{id}", 1L))
@@ -91,12 +95,11 @@ public class HogwartsFacultyApplicationMockTests {
                 .andExpect(jsonPath("$.id").value(1L));
     }
 
-
-
     @Test
     public void testUpdateFaculty() throws Exception {
         Faculty faculty = new Faculty(); // создание объекта Faculty
         faculty.setId(1L); // установите id
+
         when(facultyService.updateFaculty(any())).thenReturn(faculty);
 
         mockMvc.perform(put("/faculty")
@@ -125,8 +128,15 @@ public class HogwartsFacultyApplicationMockTests {
 
     @Test
     public void testSearch() throws Exception {
+        Long id = 1L;
+        String name = "Engineering";
+
+        JSONObject facultyObject = new JSONObject();
+        facultyObject.put("Engineering", name);
+
         List<Faculty> faculties = new ArrayList<>(); // создание списка факультетов
-        when(facultyService.searchByColorOrName(any(), any())).thenReturn(faculties);
+
+        when(facultyRepository.findByColorIgnoreCaseOrNameIgnoreCase(any(), any())).thenReturn(faculties);
 
         mockMvc.perform(get("/faculty/search")
                         .param("color", "blue")
