@@ -1,5 +1,6 @@
 package com.example.Hogwarts.service;
 import com.example.Hogwarts.controller.FacultyController;
+import com.example.Hogwarts.model.Faculty;
 import com.example.Hogwarts.model.Student;
 import com.example.Hogwarts.repository.FacultyRepository;
 import com.example.Hogwarts.repository.StudentRepository;
@@ -47,21 +48,21 @@ public class HogwartsFacultyApplicationMockTests {
         final String color = "red";
         final long id = 1;
 
-        JSONObject studentObject = new JSONObject();
-        studentObject.put("name", name);
-        studentObject.put("color", color);
+        JSONObject facultyObject = new JSONObject();
+        facultyObject.put("name", name);
+        facultyObject.put("color", color);
 
-        Student student = new Student();
-        student.setId(1L);
-        student.setName("Gryffindor");
-        studentObject.put("color", color);
+        Faculty faculty = new Faculty();
+        faculty.setId(1L);
+        faculty.setName("Gryffindor");
+        facultyObject.put("color", color);
 
-        when(studentRepository.save(any(Student.class))).thenReturn(student);
-        when(studentRepository.findById(any(Long.class))).thenReturn(Optional.of(student));
+        when(facultyRepository.save(any(Faculty.class))).thenReturn(faculty);
+        when(facultyRepository.findById(any(Long.class))).thenReturn(Optional.of(faculty));
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/faculty")
-                        .content(studentObject.toString())
+                        .content(facultyObject.toString())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -79,7 +80,7 @@ public class HogwartsFacultyApplicationMockTests {
 
         mockMvc.perform(put("/faculty")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(student)))
+                        .content(objectMapper.writeValueAsString(faculty)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.name").value("Ravenclaw"))
