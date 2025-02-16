@@ -1,18 +1,24 @@
 package com.example.Hogwarts.controller;
 import com.example.Hogwarts.exception.FacultyNotFoundException;
+import com.example.Hogwarts.model.Faculty;
 import com.example.Hogwarts.model.Student;
 import com.example.Hogwarts.service.FacultyService;
 import com.example.Hogwarts.service.StudentService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.assertj.core.util.Arrays;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.List;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -40,7 +46,7 @@ public class StudentControllerMockTests {
 
         when(studentService.getStudent(anyLong())).thenReturn(student);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/student/1"))
+        mockMvc.perform(get("/student/1"))
                 .andDo(print())
 
                 .andExpect(status().isOk())
@@ -55,7 +61,7 @@ public class StudentControllerMockTests {
 
         when(facultyService.getFaculty(anyLong())).thenThrow(FacultyNotFoundException.class);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/faculty/1"))
+        mockMvc.perform(get("/faculty/1"))
                 .andDo(print())
 
                 .andExpect(status().isNotFound());
@@ -97,4 +103,5 @@ public class StudentControllerMockTests {
                 .andExpect(status().isOk());
 
     }
-}
+
+  }
