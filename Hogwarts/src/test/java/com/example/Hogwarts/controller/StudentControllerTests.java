@@ -1,7 +1,7 @@
-package com.example.Hogwarts.service;
+package com.example.Hogwarts.controller;
 
-import com.example.Hogwarts.controller.StudentController;
 import com.example.Hogwarts.model.Student;
+import com.example.Hogwarts.service.StudentService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpMethod;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class HogwartsStudentApplicationTests {
+class StudentControllerTests {
 
     @LocalServerPort
     private int port;
@@ -38,10 +38,7 @@ class HogwartsStudentApplicationTests {
 
     @Test
     public void testCreateStudent() { // POST
-        Student newStudent = new Student();
-        newStudent.setId(30L);
-        newStudent.setName("New Student");
-        newStudent.setAge(14);
+        Student newStudent = new Student(30L,"New Student", 14);
 
         Assertions.assertThat(this.restTemplate.postForObject("http://localhost:" + port + "/student", newStudent, String.class))
                 .isNotNull();
@@ -49,10 +46,7 @@ class HogwartsStudentApplicationTests {
 
     @Test
     public void testEditStudent() { // PUT
-        Student newStudent = new Student();
-        newStudent.setId(3L);
-        newStudent.setName("new Student");
-        newStudent.setAge(14);
+        Student newStudent = new Student(3L,"New Student", 12);
 
         Assertions.assertThat(this.restTemplate.postForObject("http://localhost:" + port + "/student", newStudent, String.class))
                 .isNotNull();
@@ -60,8 +54,7 @@ class HogwartsStudentApplicationTests {
 
     @Test
     public void testDeleteStudent() { // Delete
-        Student student = new Student();
-        student.setId(130L);
+        Student student = new Student(130L,"New Student", 12);
 
         Assertions.assertThat(this.restTemplate.exchange(
                 "http://localhost:" + port + "/student/130",

@@ -1,6 +1,5 @@
-package com.example.Hogwarts.service;
+package com.example.Hogwarts.controller;
 
-import com.example.Hogwarts.controller.FacultyController;
 import com.example.Hogwarts.model.Faculty;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -11,7 +10,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpMethod;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class HogwartsFacultyApplicationTests {
+public class FacultyControllerTests {
 
     @LocalServerPort
     private int port;
