@@ -2,9 +2,12 @@ package com.example.Hogwarts.controller;
 
 import com.example.Hogwarts.model.Faculty;
 import com.example.Hogwarts.model.Student;
+import com.example.Hogwarts.repository.FacultyRepository;
 import com.example.Hogwarts.service.FacultyService;
-import com.example.Hogwarts.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,13 +19,14 @@ import java.util.List;
 public class FacultyController {
 
     private final FacultyService facultyService;
-
-    private Faculty faculty;
+    private final FacultyRepository facultyRepository;
 
     @Autowired
-    public FacultyController(FacultyService facultyService, StudentService studentService) {
+    public FacultyController(FacultyRepository facultyRepository, FacultyService facultyService) {
+        this.facultyRepository = facultyRepository;
         this.facultyService = facultyService;
     }
+
 
     @GetMapping("{id}")
     public ResponseEntity<Faculty> getFacultyInfo(@PathVariable Long id) {
@@ -62,5 +66,17 @@ public class FacultyController {
     public List<Faculty> search(@RequestParam(required = false) String color,
                                 @RequestParam(required = false) String name) {
         return facultyService.searchByColorOrName(color, name);
+    }
+
+
+    @GetMapping("/faculties")
+    public ResponseEntity<Page<Faculty>> getFaculty(
+            @RequestParam int page,
+            @RequestParam int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Faculty> facultyPage = facultyRepository.findAll(pageable);
+
+        return ResponseEntity.ok(facultyPage);
     }
 }

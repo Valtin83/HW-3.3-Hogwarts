@@ -66,4 +66,9 @@ public class FacultyControllerTests {
                 String.class));
     }
 
+    @Test
+    public void getFaculty() throws Exception { //GET
+        Assertions.assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/faculty/faculties", String.class))
+                .isNotNull();
+    }
 }

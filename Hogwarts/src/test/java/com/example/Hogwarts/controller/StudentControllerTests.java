@@ -62,5 +62,26 @@ class StudentControllerTests {
                 null,
                 String.class));
     }
+
+    @Test
+    public void testGetCountOfStudent() throws Exception { //GET
+        Assertions.assertThat(this.restTemplate.getForObject("http://localhost:" +
+                        port + "/student/students/count", String.class))
+                .isNotNull();
+    }
+
+    @Test
+    public void testGetAverageAgeOfStudent() throws Exception { //GET
+        Assertions.assertThat(this.restTemplate.getForObject("http://localhost:" +
+                        port + "/student/students/average-age", String.class))
+                .isNotNull();
+    }
+
+    @Test
+    public void testGetLastFiveStudent() throws Exception { //GET
+        Assertions.assertThat(this.restTemplate.getForObject("http://localhost:" + port
+                        + "/student/students/latest", String.class))
+                .isNotNull();
+    }
 }
 

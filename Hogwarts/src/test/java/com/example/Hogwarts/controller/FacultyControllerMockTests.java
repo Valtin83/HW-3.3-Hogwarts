@@ -3,6 +3,7 @@ package com.example.Hogwarts.controller;
 import com.example.Hogwarts.exception.FacultyNotFoundException;
 import com.example.Hogwarts.model.Faculty;
 import com.example.Hogwarts.model.Student;
+import com.example.Hogwarts.repository.FacultyRepository;
 import com.example.Hogwarts.service.FacultyService;
 import com.example.Hogwarts.service.StudentService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,6 +11,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -20,6 +25,7 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -36,6 +42,9 @@ public class FacultyControllerMockTests {
     @MockBean
     private StudentService studentService;
 
+    @MockBean
+    private FacultyRepository facultyRepository;
+
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -46,7 +55,7 @@ public class FacultyControllerMockTests {
         Faculty faculty = new Faculty(1L,"Gryffindor", "red");
         when(facultyService.getFaculty(anyLong())).thenReturn(faculty);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/faculty/1"))
+        mockMvc.perform(get("/faculty/1"))
                         .andDo(print())
 
                 .andExpect(status().isOk())
@@ -61,7 +70,7 @@ public class FacultyControllerMockTests {
 
         when(facultyService.getFaculty(anyLong())).thenThrow(FacultyNotFoundException.class);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/faculty/1"))
+        mockMvc.perform(get("/faculty/1"))
                 .andDo(print())
 
                 .andExpect(status().isNotFound());
@@ -103,4 +112,21 @@ public class FacultyControllerMockTests {
                 .andExpect(status().isOk());
     }
 
+    @Test
+    public void testGetFaculty() throws Exception {
+
+        Faculty faculty1 = new Faculty(1L, "Gryffindor", "red");
+        Faculty faculty2 = new Faculty(2L, "Hufflepuff", "yellow");
+        List<Faculty> faculties = Arrays.asList(faculty1, faculty2);
+
+        Pageable pageable = PageRequest.of(0, 2);
+        Page<Faculty> facultyPage = new PageImpl<>(faculties, pageable, faculties.size());
+
+        when(facultyRepository.findAll(any(Pageable.class))).thenReturn(facultyPage);
+
+        mockMvc.perform(get("/faculties?page=0&size=10"))
+                .andExpect(status().isOk()) // Then: Verify the status
+                .andExpect(jsonPath("$.content.length()").value(2))
+                .andExpect(jsonPath("$.totalElements").value(2));
+    }
 }
