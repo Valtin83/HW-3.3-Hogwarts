@@ -5,12 +5,14 @@ CREATE TABLE Person (
     has_driving_license BOOLEAN NOT NULL
 );
 
+
 CREATE TABLE Car (
     car_id SERIAL PRIMARY KEY,
     brand VARCHAR(50) NOT NULL,
     model VARCHAR(50) NOT NULL,
     cost DECIMAL(10, 2) NOT NULL
 );
+
 
 CREATE TABLE Person_Car (
     person_id INT,

@@ -9,4 +9,4 @@ ALTER TABLE Faculty
 ADD CONSTRAINT uq_faculty_name_color UNIQUE (faculty_name, faculty_color);
 
 ALTER TABLE Student
-ALTER COLUMN age SET DEFAULT 20;
+ALTER COLUMN age SET DEFAULT 21;
