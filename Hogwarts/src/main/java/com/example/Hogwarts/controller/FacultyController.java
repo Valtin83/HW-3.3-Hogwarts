@@ -1,5 +1,6 @@
 package com.example.Hogwarts.controller;
 
+
 import com.example.Hogwarts.model.Faculty;
 import com.example.Hogwarts.model.Student;
 import com.example.Hogwarts.repository.FacultyRepository;
