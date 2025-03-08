@@ -1,7 +1,6 @@
 package com.example.Hogwarts.repository;
 
 import com.example.Hogwarts.model.Student;
-import org.springdoc.core.converters.models.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -21,6 +20,6 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     @Query(value = "SELECT AVG(s.age) FROM Student s",nativeQuery = true)
     Double findAverageAge();
 
-    @Query(value = "SELECT s FROM Student s ORDER BY s.id DESC",nativeQuery = true )
+    @Query(value = "SELECT s FROM Student s ORDER BY s.id DESC LIMIT 5", nativeQuery = true )
    List<Student> findTop5ByOrderByIdDesc(org.springframework.data.domain.Pageable pageable);
 }

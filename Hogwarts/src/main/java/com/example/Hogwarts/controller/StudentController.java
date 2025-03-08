@@ -12,6 +12,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
+import static org.apache.coyote.http11.Constants.a;
 
 @RestController
 @RequestMapping("/student")
@@ -88,4 +93,61 @@ public class StudentController {
         return ResponseEntity.ok(students);
     }
 
+    @GetMapping("/names/startWithA")
+    public List<String> getNamesStartingWithA() {
+        return studentRepository.findAll().stream()
+                .map(student -> student.getName().toUpperCase())
+                .filter(name -> name.startsWith("А"))
+                .sorted()
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/averageAge")
+    public double getAverageAge() {
+        return studentRepository.findAll().stream()
+                .mapToInt(Student::getAge)
+                .average()
+                .orElse(0.0); // Возвращаем 0, если студентов нет
+    }
+
+    @GetMapping("/compare")
+    public ResponseEntity<String> compareSumMethods() {
+
+        // Метод 1: Вычисление суммы через Stream API
+        long startTimeStream = System.currentTimeMillis();
+        int sumStream = Stream.iterate(1, a -> a +1)
+                .limit(1_000_000)
+                .reduce(0, Integer::sum);// Суммирование через Stream API
+        long endTimeStream = System.currentTimeMillis();
+        long durationStream = endTimeStream - startTimeStream;
+
+        // Метод 2: Вычисление суммы через математическую формулу Sn=(n*(n+1))/2
+        long startTimeFormula = System.currentTimeMillis();
+        int n = 1_000_000;
+        int sumFormula = n * (n + 1) / 2; // Сумма первых n натуральных чисел
+        long endTimeFormula = System.currentTimeMillis();
+        long durationFormula = endTimeFormula - startTimeFormula;
+
+        // Формирование ответа
+        StringBuilder response = new StringBuilder()
+                .append("Результат через математическую формулу: ")
+                .append(sumFormula)
+                .append(", Время вычисления: ")
+                .append(durationFormula)
+                .append(" мс\n")
+                .append("Результат через Stream API: ")
+                .append(sumStream)
+                .append(", Время вычисления: ")
+                .append(durationStream)
+                .append(" мс\n");
+
+        // Сравнение результатов
+        if (sumFormula == sumStream) {
+            response.append("Оба метода дают одинаковый результат.");
+        } else {
+            response.append("Результаты различаются!");
+        }
+
+        return ResponseEntity.ok(response.toString());
+    }
 }

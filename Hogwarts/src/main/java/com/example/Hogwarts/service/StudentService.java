@@ -19,5 +19,4 @@ public interface StudentService {
 
     List<Student> getStudentsByAgeRange(int min, int max);
 
-
 }

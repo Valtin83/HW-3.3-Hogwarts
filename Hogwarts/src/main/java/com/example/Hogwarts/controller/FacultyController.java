@@ -4,6 +4,7 @@ package com.example.Hogwarts.controller;
 import com.example.Hogwarts.model.Faculty;
 import com.example.Hogwarts.model.Student;
 import com.example.Hogwarts.repository.FacultyRepository;
+import com.example.Hogwarts.repository.StudentRepository;
 import com.example.Hogwarts.service.FacultyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
 import java.util.List;
 
 @RestController
@@ -23,11 +25,10 @@ public class FacultyController {
     private final FacultyRepository facultyRepository;
 
     @Autowired
-    public FacultyController(FacultyRepository facultyRepository, FacultyService facultyService) {
+    public FacultyController(FacultyRepository facultyRepository, FacultyService facultyService, StudentRepository studentRepository, StudentRepository studentRepository1) {
         this.facultyRepository = facultyRepository;
         this.facultyService = facultyService;
     }
-
 
     @GetMapping("{id}")
     public ResponseEntity<Faculty> getFacultyInfo(@PathVariable Long id) {
@@ -80,4 +81,13 @@ public class FacultyController {
 
         return ResponseEntity.ok(facultyPage);
     }
+
+    @GetMapping("/longestFacultyName")
+    public String getLongestFacultyName() {
+        return facultyRepository.findAll().stream()
+                .map(Faculty::getName)
+                .max(Comparator.comparingInt(String::length))
+                .orElse(null);
+    }
+
 }
