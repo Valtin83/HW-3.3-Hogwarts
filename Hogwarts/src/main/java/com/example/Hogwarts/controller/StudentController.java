@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -150,4 +152,33 @@ public class StudentController {
 
         return ResponseEntity.ok(response.toString());
     }
+
+    @GetMapping("/students/print-parallel")
+    public void printStudentsInParallel() {
+        List<Student> students = studentRepository.findAll();
+
+        System.out.println(Thread.currentThread().getName() + ": " + students.get(0).getName());
+        System.out.println(Thread.currentThread().getName() + ": " + students.get(1).getName());
+
+        ExecutorService executor = Executors.newFixedThreadPool(2);
+
+        // Параллельный вывод остальных имен
+        for (int i = 2; i < students.size(); i++) {
+            final int index = i;
+            executor.submit(() -> System.out.println(Thread.currentThread().getName() + ": " + students.get(index).getName()));
+        }
+
+        executor.shutdown(); // Закрываем Executor после завершения задач
+    }
+
+    @GetMapping("/students/print-synchronous")
+    public void printStudentsSynchronous() {
+        List<Student> students = studentRepository.findAll();
+
+        for (Student student : students) {
+            System.out.println(Thread.currentThread().getName() + ": " + student.getName());
+        }
+    }
+
+
 }
