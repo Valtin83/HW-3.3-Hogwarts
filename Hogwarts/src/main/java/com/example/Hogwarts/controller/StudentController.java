@@ -171,14 +171,47 @@ public class StudentController {
         executor.shutdown(); // Закрываем Executor после завершения задач
     }
 
+    private synchronized void printStudent(String name) {
+        System.out.println(Thread.currentThread().getName() + ": " + name);
+    }
+
     @GetMapping("/students/print-synchronous")
     public void printStudentsSynchronous() {
         List<Student> students = studentRepository.findAll();
 
-        for (Student student : students) {
-            System.out.println(Thread.currentThread().getName() + ": " + student.getName());
+        if (students.size() > 0) {
+            printStudent(students.get(0).getName());
+        }
+        if (students.size() > 1) {
+            printStudent(students.get(1).getName());
+        }
+
+        Thread thread1 = new Thread(() -> {
+            if (students.size() > 2) {
+                printStudent(students.get(2).getName());
+            }
+            if (students.size() > 3) {
+                printStudent(students.get(3).getName());
+            }
+        });
+
+        Thread thread2 = new Thread(() -> {
+            if (students.size() > 4) {
+                printStudent(students.get(4).getName());
+            }
+            if (students.size() > 5) {
+                printStudent(students.get(5).getName());
+            }
+        });
+
+        thread1.start();
+        thread2.start();
+
+        try {
+            thread1.join();
+            thread2.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
-
-
 }
